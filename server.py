@@ -17,7 +17,7 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -85,22 +85,34 @@ def append_audit(entry: dict):
     with open(audit_file, "a") as f:
         f.write(json.dumps(entry) + "\n")
 
-# ─── Agent Discovery ──────────────────────────────────────────────
+# ─── Agent Discovery (with cache) ─────────────────────────────────
+
+_agent_cache = {}
+_agent_cache_time = 0
 
 def check_agent(name: str) -> dict:
+    global _agent_cache, _agent_cache_time
+    now = time.time()
+    if now - _agent_cache_time < 15 and name in _agent_cache:
+        return _agent_cache[name]
     try:
         if name == "opencode":
-            r = subprocess.run(["opencode", "--version"], capture_output=True, text=True, timeout=5)
-            return {"name": "opencode", "status": "online" if r.returncode == 0 else "error"}
+            r = subprocess.run(["opencode", "--version"], capture_output=True, text=True, timeout=3)
+            status = "online" if r.returncode == 0 else "error"
         elif name == "hermes":
-            r = subprocess.run(["hermes", "--version"], capture_output=True, text=True, timeout=5)
-            return {"name": "hermes", "status": "online" if r.returncode == 0 else "error"}
+            r = subprocess.run(["hermes", "--version"], capture_output=True, text=True, timeout=3)
+            status = "online" if r.returncode == 0 else "error"
         elif name == "gemini":
-            r = subprocess.run(["gemini", "--version"], capture_output=True, text=True, timeout=5)
-            return {"name": "gemini", "status": "online" if r.returncode == 0 else "error"}
+            r = subprocess.run(["gemini", "--version"], capture_output=True, text=True, timeout=3)
+            status = "online" if r.returncode == 0 else "error"
+        else:
+            status = "offline"
     except Exception:
-        return {"name": name, "status": "offline"}
-    return {"name": name, "status": "offline"}
+        status = "offline"
+    result = {"name": name, "status": status}
+    _agent_cache[name] = result
+    _agent_cache_time = now
+    return result
 
 # ─── Routes: Status ───────────────────────────────────────────────
 
@@ -522,9 +534,15 @@ def index():
 
 # ─── Favicon ──────────────────────────────────────────────────────
 
+FAVICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6c5ce7"/><stop offset="100%" stop-color="#fd79a8"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#g)"/><polygon points="16,6 24,11 24,21 16,26 8,21 8,11" fill="none" stroke="white" stroke-width="2" stroke-linejoin="round"/><circle cx="16" cy="16" r="3" fill="white"/></svg>'
+
 @app.get("/favicon.ico")
 def favicon():
-    return HTMLResponse("")
+    return Response(content=FAVICON_SVG, media_type="image/svg+xml")
+
+@app.get("/favicon.svg")
+def favicon_svg():
+    return Response(content=FAVICON_SVG, media_type="image/svg+xml")
 
 # ─── Main ─────────────────────────────────────────────────────────
 

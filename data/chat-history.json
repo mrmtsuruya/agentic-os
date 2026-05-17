@@ -41,6 +41,20 @@
       "agent": "opencode",
       "content": "\u23f1 Agent 'opencode' took too long to respond.\n\nYour message has been dispatched. For a full response, run the agent CLI directly in your terminal.\n\n**Message:** hello",
       "timestamp": "2026-05-17T10:42:36.569740+00:00"
+    },
+    {
+      "id": "0801ef96",
+      "role": "user",
+      "agent": "opencode",
+      "content": "hey",
+      "timestamp": "2026-05-17T10:49:09.907635+00:00"
+    },
+    {
+      "id": "13259f25",
+      "role": "assistant",
+      "agent": "opencode",
+      "content": "Hey Mihir. What are we working on today?\n\u001b[0m\n> build \u00b7 deepseek-v4-flash-free\n\u001b[0m\n",
+      "timestamp": "2026-05-17T10:49:19.652896+00:00"
     }
   ]
 }

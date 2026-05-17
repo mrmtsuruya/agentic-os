@@ -53,8 +53,10 @@ function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const isCollapsed = sidebar.classList.toggle('collapsed');
   localStorage.setItem('sidebarCollapsed', isCollapsed);
-  const btn = sidebar.querySelector('.sidebar-toggle');
-  if (btn) btn.textContent = isCollapsed ? '▶' : '◀';
+  const icon = sidebar.querySelector('.toggle-icon');
+  if (icon) {
+    icon.style.transform = isCollapsed ? 'rotate(180deg)' : '';
+  }
 }
 
 function toggleTheme() {
@@ -69,9 +71,10 @@ function loadTheme() {
   if (saved) document.documentElement.setAttribute('data-theme', saved);
   const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
   if (sidebarCollapsed === 'true') {
-    document.getElementById('sidebar').classList.add('collapsed');
-    const btn = document.querySelector('.sidebar-toggle');
-    if (btn) btn.textContent = '▶';
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.add('collapsed');
+    const icon = sidebar.querySelector('.toggle-icon');
+    if (icon) icon.style.transform = 'rotate(180deg)';
   }
 }
 
