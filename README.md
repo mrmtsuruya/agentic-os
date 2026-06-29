@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/FastAPI-0.115+-green.svg" alt="FastAPI"/>
   <img src="https://img.shields.io/badge/agents-3-orange.svg" alt="3 Agents"/>
   <img src="https://img.shields.io/badge/skills-16-purple.svg" alt="16 Skills"/>
-  <img src="https://img.shields.io/badge/version-v0.2.0-blueviolet.svg" alt="v0.2.0"/>
+  <img src="https://img.shields.io/badge/version-v0.3.0-blueviolet.svg" alt="v0.3.0"/>
   <img src="https://img.shields.io/badge/status-stable-brightgreen.svg" alt="Status: Stable"/>
   <a href="https://dev.to/mihir_nmodi_14a06a4019e1/i-built-an-open-source-agent-os-2h30"><img src="https://img.shields.io/badge/dev.to-article-blue.svg" alt="dev.to article"/></a>
   <br/><br/>
@@ -42,34 +42,41 @@ A locally-hosted operating system for AI agents — an open-source GitHub reposi
 | **🧭 Smart Router** | Keyword-based task routing with confidence scoring — suggests best agent for any task |
 | **📊 Learning Analytics** | Skill evaluation scores, performance trends, and historical charts |
 | **🎬 Session Replay** | Browse and replay past opencode sessions from the dashboard |
+| **⚠ Error Dashboard** | Real-time error tracking with category filtering and circuit breaker status |
+| **🔌 Circuit Breaker** | Auto-trip after N failures, auto-recovery after 300s, manual reset |
+| **⏱ Event-Driven Scheduler** | File-watcher auto-reloads jobs on change, webhook receiver, execution history |
+| **🔗 Webhook Receiver** | `/api/webhook` — trigger skill execution from external tools |
+| **🧠 SQLite FTS5 Memory** | Full-text search across brain, skills, journal with entity extraction |
+| **🤖 Auto-Skill Generator** | `POST /api/skills/generate` — create SKILL.md from natural language |
+| **📱 Mobile PWA** | Bottom navigation bar, manifest.json, service worker, touch-friendly UI |
 
 ---
 
 ## 🏗 Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                    AGENTIC OS DASHBOARD                      │
-│                    FastAPI + Tailwind SPA                    │
-├──────────────────────────────────────────────────────────────┤
-│                                                              │
-│  ┌──────────────-┐  ┌──────────────┐  ┌──────────────────┐   |
-│  │   opencode    │  │    Hermes    │  │   Gemini CLI     │   │
-│  │  (Code/DevOps)│  │ (Memory/Sched│  │ (Research/Analy) │   │
-│  │  File Ops)    │  │  /Channels)  │  │                  │   │
-│  └──────────────-┘  └──────────────┘  └──────────────────┘   |
-│                                                              │
-│  ┌──────────────────────────────────────────────────────┐    │
-│  │              7 CORE LAYERS (Stacked)                 │    │
-│  │  Layer 7: Identity / Persona / Constitution          │    │
-│  │  Layer 6: Self-Evolution + Capability Manager        │    │
-│  │  Layer 5: Scheduler + Awareness + Health Guardian    │    │
-│  │  Layer 4: Memory Graph + Memory Consolidation        │    │
-│  │  Layer 3: Skills Hub + Eval + Learnings Loop         │    │
-│  │  Layer 2: Business Brain + Context Folders           │    │
-│  │  Layer 1: Agent Router + Standards + Profiles        │    │
-│  └──────────────────────────────────────────────────────┘    │
-└──────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│                    AGENTIC OS DASHBOARD                        │
+│                    FastAPI + Tailwind SPA                      │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────────────┐│
+│  │    opencode    │  │    Hermes      │  │    Gemini CLI      ││
+│  │  (Code/DevOps) │  │ (Memory/Sched) │  │ (Research/Analy)   ││
+│  │   File Ops)    │  │  /Channels)    │  │                    ││
+│  └────────────────┘  └────────────────┘  └────────────────────┘│
+│                                                                │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │                 7 CORE LAYERS (Stacked)                  │  │
+│  │  Layer 7: Identity / Persona / Constitution             │  │
+│  │  Layer 6: Self-Evolution + Capability Manager           │  │
+│  │  Layer 5: Scheduler + Awareness + Health Guardian       │  │
+│  │  Layer 4: Memory Graph + Memory Consolidation           │  │
+│  │  Layer 3: Skills Hub + Eval + Learnings Loop            │  │
+│  │  Layer 2: Business Brain + Context Folders              │  │
+│  │  Layer 1: Agent Router + Standards + Profiles           │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────┘
 ```
 
 ### Agent Responsibilities
@@ -157,7 +164,7 @@ agentic-os/
 │   ├── api.js             # API client (all endpoints)
 │   ├── styles.css         # Full dark/light theme CSS
 │   ├── utils.js           # Shared utilities
-│   └── pages/             # 20 page modules (13 original + 7 v0.2.0)
+│   └── pages/             # 21 page modules (13 original + 7 v0.2.0 + 1 v0.3.0)
 │       ├── dashboard.js   # Overview with stats
 │       ├── skills.js      # Skill grid/list/detail
 │       ├── memory.js      # Brain file editor
@@ -177,9 +184,11 @@ agentic-os/
 │       ├── agent-health.js # ▸ Agent Health (v0.2.0)
 │       ├── smart-router.js # ▸ Smart Router (v0.2.0)
 │       ├── learning-analytics.js # ▸ Learning Analytics (v0.2.0)
-│       └── session-replay.js # ▸ Session Replay (v0.2.0)
+│       ├── session-replay.js # ▸ Session Replay (v0.2.0)
+│       └── errors.js       # ▸ Error Dashboard (v0.3.0)
 │
 ├── brain/                 # Shared context (all agents read)
+│   ├── memory_search.py   # ▸ SQLite FTS5 search (v0.3.0)
 │   ├── business-brain.md  # Current project context
 │   ├── memory.md          # Accumulated knowledge
 │   ├── recent-decisions.md
@@ -211,10 +220,35 @@ agentic-os/
 ├── registry/              # Plugin marketplace
 ├── standards/             # Discover/inject conventions
 ├── prompts/               # 10 reusable templates
-├── data/                  # Runtime data (agent-routes.json tracked; settings/cost/chat gitignored)
+├── data/                  # Runtime data (agent-routes.json tracked; settings/cost/chat/error/scheduler/memory/circuit/kanban gitignored)
 ├── audit/                 # Activity log (gitignored)
 └── backups/               # Snapshots (gitignored)
 ```
+
+---
+
+## 🆕 What's New in v0.3.0
+
+| Feature | Description |
+|---------|-------------|
+| **🔒 Security Audit** | 23 vulnerabilities fixed: 3 CRITICAL (path traversal), 8 HIGH (XSS, command injection, missing headers), 7 MEDIUM. Security headers middleware added (CSP, HSTS, X-Frame-Options) |
+| **⏱ Event-Driven Scheduler** | Rewritten with file-watcher auto-reload (watchdog-style), webhook receiver at `/api/webhook`, execution history, manual job triggers |
+| **⚠ Error Dashboard** | New `/api/errors` endpoints with category filtering (agent/skill/api/system). Dedicated dashboard page with error log + circuit breaker status cards |
+| **🔌 Circuit Breaker** | Auto-trip after 3 failures, half-open recovery after 300s. Per-agent state tracking with manual reset. Prevents cascading failures to offline agents |
+| **🧠 Persistent Memory (SQLite FTS5)** | Full-text search across `brain/*.md`, `skills/*/*.md`, `brain/journal/`. Entity extraction (persons, emails, URLs, acronyms, IPs). Reindex endpoint |
+| **🤖 Auto-Skill Generator** | `POST /api/skills/generate` takes natural language description → creates full SKILL.md with eval.json and context folder |
+| **🔗 Webhook Receiver** | Generic webhook at `/api/webhook/generic` plus skill-targeted webhooks. Integrates with GitHub, CI/CD, external tools |
+| **📱 Mobile PWA** | Bottom navigation bar, `manifest.json`, service worker (offline fallback), PWA meta tags, touch-friendly 16px inputs, responsive grid collapse |
+
+### Security Hardening
+- **Path traversal**: All file endpoints validate `..` and `/` in user-supplied names
+- **XSS elimination**: 19 violations fixed across 7 JS files — all `onclick` handlers use `encodeURIComponent`, all text uses `escapeHtml()`
+- **Security headers**: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy
+- **CORS restricted**: Only `http://127.0.0.1:8080` and `http://localhost:8080`
+- **API keys masked**: `/api/settings` returns keys as masked values (e.g., `sk-o****`)
+- **Input validation**: Chat messages limited to 10K chars, brain/skill names reject special chars
+- **Session replay**: Content limited to 2000 chars, path traversal prevented
+- **Runtime data gitignored**: `error-log.json`, `circuit-breaker.json`, `scheduler-history.json`, `memory.db`, `kanban/*.json`
 
 ---
 
@@ -279,6 +313,24 @@ View evaluation scores for all 16 skills. Trends chart shows score progression o
 
 ### Session Replay (v0.2.0)
 Browse opencode session logs by date and size. Click "Replay" to view all messages in a chat-like interface.
+
+### Error Dashboard (v0.3.0)
+View system errors grouped by category (agent, skill, API, system). Filter by category, clear all errors. Circuit breaker cards show per-agent failure state — reset from the dashboard.
+
+### Event-Driven Scheduler (v0.3.0)
+Jobs auto-reload when JSON files in `scheduler/jobs/` change. Trigger skills via webhooks at `POST /api/webhook` with `{"skill": "skill-name", "payload": {...}}`. Manual trigger at `/api/scheduler/trigger/{job_id}`.
+
+### Persistent Memory Search (v0.3.0)
+Full-text search across all brain files, skills, and journal entries via SQLite FTS5. Query at `GET /api/memory/search?q=...` with highlighted snippets. Reindex at `POST /api/memory/reindex`. Entities (persons, emails, URLs) auto-extracted.
+
+### Auto-Skill Generator (v0.3.0)
+Create new skills from natural language: `POST /api/skills/generate` with `{"name": "my-skill", "description": "Does X by doing Y"}`. Generates SKILL.md, eval.json, learnings.md, and context folder.
+
+### Webhooks (v0.3.0)
+`POST /api/webhook` — trigger any skill by name. `POST /api/webhook/generic` — catch-all for external tool integration (GitHub, CI/CD, etc.).
+
+### Mobile PWA (v0.3.0)
+Open Agentic OS on your phone — bottom nav bar replaces sidebar, touch targets are 44px+, service worker caches assets. Add to home screen for app-like experience.
 
 ---
 
