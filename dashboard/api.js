@@ -82,6 +82,8 @@ const api = {
   studioEpisodes: () => api.get('/api/studio/episodes'),
   studioApprove: (id) => api.post('/api/studio/approve-publish', { id }),
   studioOauthStatus: () => api.get('/api/studio/oauth-status'),
+  // B: Mission Control
+  missionOverview: () => api.get('/api/mission-control/overview'),
   completeKanbanTask: (id, summary) => api.post(`/api/kanban/tasks/${encodeURIComponent(id)}/complete`, { summary }),
   blockKanbanTask: (id, reason) => api.post(`/api/kanban/tasks/${encodeURIComponent(id)}/block`, { reason }),
   unblockKanbanTask: (id) => api.post(`/api/kanban/tasks/${encodeURIComponent(id)}/unblock`, {}),

@@ -132,6 +132,7 @@ const PAGE_TITLES = {
   'learning-analytics': { title: 'Learning Analytics', breadcrumb: 'Skill improvement tracking' },
   'session-replay': { title: 'Session Replay', breadcrumb: 'Conversation history playback' },
   agents: { title: 'Agent Registry', breadcrumb: 'Auto-detect · install · remediate' },
+  mission: { title: 'Mission Control', breadcrumb: 'Per-agent status · tasks · cost' },
   panels: { title: 'Brainstorm Panel', breadcrumb: 'Fan-out to all online agents' },
   ide: { title: 'IDE', breadcrumb: 'Monaco editor + terminal' },
   studio: { title: 'Studio', breadcrumb: 'YouTube autopilot (human-approved)' },
