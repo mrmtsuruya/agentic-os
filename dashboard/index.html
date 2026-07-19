@@ -18,68 +18,49 @@
 </head>
 <body>
   <div id="topLoadingBar"></div>
-  <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header">
-      <div class="logo" onclick="navigate('dashboard')" style="cursor:pointer" title="Go to Dashboard">
-        <svg class="logo-svg" viewBox="0 0 36 36" width="36" height="36">
-          <defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6c5ce7"/><stop offset="100%" stop-color="#fd79a8"/></linearGradient></defs>
-          <rect x="2" y="2" width="32" height="32" rx="10" fill="url(#lg)" opacity="0.15"/>
-          <rect x="4" y="4" width="28" height="28" rx="8" fill="none" stroke="url(#lg)" stroke-width="1.5"/>
-          <polygon points="18,8 26,13 26,23 18,28 10,23 10,13" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linejoin="round"/>
-          <circle cx="18" cy="18" r="4" fill="url(#lg)"/>
-        </svg>
-        <span class="logo-text">Agentic OS</span>
-      </div>
-      <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">
-        <svg viewBox="0 0 24 24" width="18" height="18" class="toggle-icon">
-          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
+  <!-- Top tab bar: decision-first primary nav (≤4 + Trail) -->
+  <div class="top-tab-bar" id="topTabBar">
+    <a class="top-tab" data-page="ops"><span class="tab-icon">🛰</span><span>Brief</span></a>
+    <a class="top-tab" data-page="mission"><span class="tab-icon">🎯</span><span>Missions</span></a>
+    <a class="top-tab" data-page="intel"><span class="tab-icon">📡</span><span>Intelligence</span></a>
+    <a class="top-tab" data-page="agents"><span class="tab-icon">🤖</span><span>Agents</span></a>
+    <a class="top-tab" data-page="audit"><span class="tab-icon">📋</span><span>Trail</span></a>
+    <div class="top-tab tools" onclick="toggleToolsDrawer()"><span class="tab-icon">☰</span><span>Tools</span></div>
+  </div>
+
+  <!-- Tools drawer: everything else -->
+  <div class="tools-drawer-overlay" id="toolsOverlay" onclick="toggleToolsDrawer()"></div>
+  <aside class="tools-drawer" id="toolsDrawer">
+    <div class="tools-drawer-header">
+      <h3>Tools</h3>
+      <button class="theme-btn" onclick="toggleToolsDrawer()" title="Close">✕</button>
     </div>
-    <div class="sidebar-nav">
-      <div class="sidebar-section"><div class="sidebar-section-label">Primary</div></div>
-      <a href="#chat" class="nav-item" data-page="chat"><span class="nav-icon">💬</span><span class="nav-label">AI Chat</span></a>
-      <a href="#dashboard" class="nav-item active" data-page="dashboard"><span class="nav-icon">◉</span><span class="nav-label">Dashboard</span></a>
-      <a href="#ops" class="nav-item" data-page="ops"><span class="nav-icon">🛰</span><span class="nav-label">Operations</span></a>
-      <a href="#intel" class="nav-item" data-page="intel"><span class="nav-icon">📡</span><span class="nav-label">Intelligence</span></a>
-      <div class="sidebar-section"><div class="sidebar-section-label">Agents</div></div>
-      <a href="#skills" class="nav-item" data-page="skills"><span class="nav-icon">⚡</span><span class="nav-label">Skills</span><span class="nav-badge" id="skillCount">0</span></a>
-      <a href="#memory" class="nav-item" data-page="memory"><span class="nav-icon">🧠</span><span class="nav-label">Memory</span></a>
-      <a href="#agents" class="nav-item" data-page="agents"><span class="nav-icon">🤖</span><span class="nav-label">Agent Registry</span></a>
-      <a href="#mission" class="nav-item" data-page="mission"><span class="nav-icon">🎯</span><span class="nav-label">Mission Control</span></a>
-      <a href="#panels" class="nav-item" data-page="panels"><span class="nav-icon">🧩</span><span class="nav-label">Brainstorm</span></a>
-      <a href="#ide" class="nav-item" data-page="ide"><span class="nav-icon">💻</span><span class="nav-label">IDE</span></a>
-      <a href="#studio" class="nav-item" data-page="studio"><span class="nav-icon">📺</span><span class="nav-label">Studio</span></a>
-      <a href="#scheduler" class="nav-item" data-page="scheduler"><span class="nav-icon">⏱</span><span class="nav-label">Scheduler</span></a>
-      <a href="#audit" class="nav-item" data-page="audit"><span class="nav-icon">📋</span><span class="nav-label">Audit</span></a>
-      <div class="sidebar-section"><div class="sidebar-section-label">Workflow</div></div>
-      <a href="#kanban" class="nav-item" data-page="kanban"><span class="nav-icon">📌</span><span class="nav-label">Kanban Board</span></a>
-      <a href="#goals" class="nav-item" data-page="goals"><span class="nav-icon">🎯</span><span class="nav-label">Goals</span></a>
-      <a href="#journal" class="nav-item" data-page="journal"><span class="nav-icon">📓</span><span class="nav-label">Journal</span></a>
-      <div class="sidebar-section"><div class="sidebar-section-label">Monitoring</div></div>
-      <a href="#agent-health" class="nav-item" data-page="agent-health"><span class="nav-icon">🏥</span><span class="nav-label">Agent Health</span><span class="nav-badge" id="agentHealthCount">0</span></a>
-      <a href="#smart-router" class="nav-item" data-page="smart-router"><span class="nav-icon">🧭</span><span class="nav-label">Smart Router</span></a>
-      <a href="#learning-analytics" class="nav-item" data-page="learning-analytics"><span class="nav-icon">📊</span><span class="nav-label">Learning Analytics</span></a>
-      <a href="#session-replay" class="nav-item" data-page="session-replay"><span class="nav-icon">🔄</span><span class="nav-label">Session Replay</span></a>
-      <a href="#errors" class="nav-item" data-page="errors"><span class="nav-icon">⚠</span><span class="nav-label">Error Dashboard</span><span class="nav-badge" id="errorCount">0</span></a>
-      <div class="sidebar-section"><div class="sidebar-section-label">Management</div></div>
-      <a href="#cost" class="nav-item" data-page="cost"><span class="nav-icon">💰</span><span class="nav-label">Cost Analytics</span></a>
-      <a href="#plugins" class="nav-item" data-page="plugins"><span class="nav-icon">🔌</span><span class="nav-label">Plugins</span></a>
-      <a href="#backups" class="nav-item" data-page="backups"><span class="nav-icon">💾</span><span class="nav-label">Backups</span></a>
-      <a href="#prompts" class="nav-item" data-page="prompts"><span class="nav-icon">📝</span><span class="nav-label">Prompts</span></a>
-      <a href="#standards" class="nav-item" data-page="standards"><span class="nav-icon">📐</span><span class="nav-label">Standards</span></a>
-      <div class="sidebar-section"><div class="sidebar-section-label">System</div></div>
-      <a href="#settings" class="nav-item" data-page="settings"><span class="nav-icon">⚙</span><span class="nav-label">Settings</span></a>
-      <a href="#setup-wizard" class="nav-item" data-page="setup-wizard"><span class="nav-icon">🚀</span><span class="nav-label">Setup Wizard</span></a>
+    <div class="tools-drawer-nav" id="toolsDrawerNav">
+      <a class="nav-item" data-page="chat"><span class="nav-icon">💬</span><span class="nav-label">AI Chat</span></a>
+      <a class="nav-item" data-page="dashboard"><span class="nav-icon">◉</span><span class="nav-label">Dashboard</span></a>
+      <a class="nav-item" data-page="skills"><span class="nav-icon">⚡</span><span class="nav-label">Skills</span><span class="nav-badge" id="skillCount">0</span></a>
+      <a class="nav-item" data-page="memory"><span class="nav-icon">🧠</span><span class="nav-label">Memory</span></a>
+      <a class="nav-item" data-page="panels"><span class="nav-icon">🧩</span><span class="nav-label">Brainstorm</span></a>
+      <a class="nav-item" data-page="ide"><span class="nav-icon">💻</span><span class="nav-label">IDE</span></a>
+      <a class="nav-item" data-page="studio"><span class="nav-icon">📺</span><span class="nav-label">Studio</span></a>
+      <a class="nav-item" data-page="scheduler"><span class="nav-icon">⏱</span><span class="nav-label">Scheduler</span></a>
+      <a class="nav-item" data-page="kanban"><span class="nav-icon">📌</span><span class="nav-label">Kanban Board</span></a>
+      <a class="nav-item" data-page="goals"><span class="nav-icon">🎯</span><span class="nav-label">Goals</span></a>
+      <a class="nav-item" data-page="journal"><span class="nav-icon">📓</span><span class="nav-label">Journal</span></a>
+      <a class="nav-item" data-page="agent-health"><span class="nav-icon">🏥</span><span class="nav-label">Agent Health</span><span class="nav-badge" id="agentHealthCount">0</span></a>
+      <a class="nav-item" data-page="smart-router"><span class="nav-icon">🧭</span><span class="nav-label">Smart Router</span></a>
+      <a class="nav-item" data-page="learning-analytics"><span class="nav-icon">📊</span><span class="nav-label">Learning Analytics</span></a>
+      <a class="nav-item" data-page="session-replay"><span class="nav-icon">🔄</span><span class="nav-label">Session Replay</span></a>
+      <a class="nav-item" data-page="errors"><span class="nav-icon">⚠</span><span class="nav-label">Error Dashboard</span><span class="nav-badge" id="errorCount">0</span></a>
+      <a class="nav-item" data-page="cost"><span class="nav-icon">💰</span><span class="nav-label">Cost Analytics</span></a>
+      <a class="nav-item" data-page="plugins"><span class="nav-icon">🔌</span><span class="nav-label">Plugins</span></a>
+      <a class="nav-item" data-page="backups"><span class="nav-icon">💾</span><span class="nav-label">Backups</span></a>
+      <a class="nav-item" data-page="prompts"><span class="nav-icon">📝</span><span class="nav-label">Prompts</span></a>
+      <a class="nav-item" data-page="standards"><span class="nav-icon">📐</span><span class="nav-label">Standards</span></a>
+      <a class="nav-item" data-page="settings"><span class="nav-icon">⚙</span><span class="nav-label">Settings</span></a>
+      <a class="nav-item" data-page="setup-wizard"><span class="nav-icon">🚀</span><span class="nav-label">Setup Wizard</span></a>
     </div>
-    <div class="sidebar-footer">
-      <div class="agent-status-bar" id="agentStatusBar">
-        <div class="agent-dot offline"></div>
-        <span class="agent-status-text">Connecting...</span>
-      </div>
-      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span class="theme-label">🌓</span></button>
-    </div>
-  </nav>
+  </aside>
 
   <main class="main-content">
     <div class="topbar">
@@ -92,6 +73,11 @@
           <span>🔍</span>
           <input type="text" placeholder="Search skills..." id="globalSearch" oninput="handleGlobalSearch(this.value)">
         </div>
+        <div class="agent-status-bar" id="agentStatusBar">
+          <div class="agent-dot offline"></div>
+          <span class="agent-status-text">Connecting...</span>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span class="theme-label">🌓</span></button>
       </div>
     </div>
     <div id="pageContent" class="page-content">
@@ -103,11 +89,11 @@
   <div id="modalContainer"></div>
 
   <nav id="bottomNav" class="bottom-nav">
-    <a href="#chat" class="bottom-nav-item" data-page="chat"><span class="bottom-nav-icon">💬</span><span class="bottom-nav-label">Chat</span></a>
-    <a href="#dashboard" class="bottom-nav-item" data-page="dashboard"><span class="bottom-nav-icon">◉</span><span class="bottom-nav-label">Home</span></a>
-    <a href="#skills" class="bottom-nav-item" data-page="skills"><span class="bottom-nav-icon">⚡</span><span class="bottom-nav-label">Skills</span></a>
-    <a href="#kanban" class="bottom-nav-item" data-page="kanban"><span class="bottom-nav-icon">📌</span><span class="bottom-nav-label">Board</span></a>
-    <a href="#errors" class="bottom-nav-item" data-page="errors"><span class="bottom-nav-icon">⚠</span><span class="bottom-nav-label">Errors</span></a>
+    <a href="#ops" class="bottom-nav-item" data-page="ops"><span class="bottom-nav-icon">🛰</span><span class="bottom-nav-label">Brief</span></a>
+    <a href="#mission" class="bottom-nav-item" data-page="mission"><span class="bottom-nav-icon">🎯</span><span class="bottom-nav-label">Missions</span></a>
+    <a href="#intel" class="bottom-nav-item" data-page="intel"><span class="bottom-nav-icon">📡</span><span class="bottom-nav-label">Intel</span></a>
+    <a href="#agents" class="bottom-nav-item" data-page="agents"><span class="bottom-nav-icon">🤖</span><span class="bottom-nav-label">Agents</span></a>
+    <a href="#audit" class="bottom-nav-item" data-page="audit"><span class="bottom-nav-icon">📋</span><span class="bottom-nav-label">Trail</span></a>
   </nav>
 
   <script src="utils.js"></script>

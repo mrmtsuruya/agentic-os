@@ -87,7 +87,32 @@ async function updateAgentStatus() {
 window.addEventListener('hashchange', () => navigate());
 window.addEventListener('DOMContentLoaded', () => {
   loadTheme();
-  navigate(window.location.hash.slice(1) || 'dashboard');
+  navigate(window.location.hash.slice(1) || 'ops');  // Brief as hero landing
   updateAgentStatus();
   setInterval(updateAgentStatus, 15000);
 });
+
+// Decision-first nav: any element with data-page navigates (top tabs + drawer)
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-page]');
+  if (!el) return;
+  const page = el.getAttribute('data-page');
+  if (page) {
+    navigate(page);
+    closeToolsDrawer();
+  }
+});
+
+function toggleToolsDrawer() {
+  const d = document.getElementById('toolsDrawer');
+  const o = document.getElementById('toolsOverlay');
+  if (!d || !o) return;
+  const open = d.classList.toggle('open');
+  o.classList.toggle('open', open);
+}
+function closeToolsDrawer() {
+  const d = document.getElementById('toolsDrawer');
+  const o = document.getElementById('toolsOverlay');
+  if (d) d.classList.remove('open');
+  if (o) o.classList.remove('open');
+}
