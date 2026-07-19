@@ -106,8 +106,22 @@ ports (8080/8090/3000) instead of hardcoded 8080.
           runWorkerOnce(). api.js wrappers added.
         NOTE: "verified" means agent produced output, not test-verified-correct. A
           future hook can run unit tests for code tasks; currently human-review gate.
-- [ ] P5: Studio/YouTube autopilot. Backend backend/youtube.py + pages/studio.js.
-        Needs Google OAuth client (setup script). Human-approve gate.
+- [x] P5: Studio/YouTube autopilot.
+        VERIFIED 2026-07-20 (fail-closed; no API keys on machine):
+        - backend/youtube.py: /research (YT Data API), /seo + /script + /generate
+          (LLM via OpenAI/Nous), /generate assembles mp4 (TTS voiceover + ffmpeg
+          text-slide deck + burned captions) + thumbnail PNG. /episodes lists drafts.
+          /approve-publish is HUMAN-APPROVE GATED: uploads only if OAuth token
+          present + explicit approve; else 409. /oauth-status reports state.
+        - Live (no keys): oauth-status configured:false, episodes empty,
+          /generate -> 502 "No LLM key configured" (fail-closed, no fabrication).
+          Ad-hoc script ALL PASSED.
+        - Frontend: studio.js pipeline board + episodes + approve button; nav entry;
+          PAGE_TITLES; api.js wrappers.
+        GOTCHAS: needs NOUS_OPENAI_KEY (LLM/TTS), YOUTUBE_API_KEY (research), and a
+          Google Cloud OAuth token at data/youtube_token.json to PUBLISH. Visuals are
+          local ffmpeg text-slides (AI imagery is a later swap).
+- [x] SHIP: P0-P5 built, each verified live (ad-hoc scripts ALL PASSED), committed + pushed.
 
 ## DEPLOYMENT NOTES (verified)
 - Start: cd agentic-os-build && . .venv/Scripts/activate && python server.py --port 8090
