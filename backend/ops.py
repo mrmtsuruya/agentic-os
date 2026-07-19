@@ -32,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA = BASE_DIR / "data"
 MISSIONS = DATA / "missions.json"
 AUDIT = DATA / "ops_audit.json"
-MISSION_FILE = DATA / "missions.json"
+INTEL_FILE = DATA / "intel" / "signals.json"
 
 AUTONOMY_DEFAULT = "autonomous"  # autonomous | manual | elevated
 AGENT_CTRL = {}  # name -> {"autonomy": str, "paused": bool}
@@ -272,6 +272,21 @@ def ceo_brief():
                                   "title": f"Video draft awaiting publish: {em.get('topic')}",
                                   "detail": "Human approval required before YouTube upload.",
                                   "ref": em.get("id")})
+
+    sev_rank = {"critical": 0, "high": 1, "medium": 2, "low": 3}
+
+    try:
+        from backend.intel import _load as _iload, INTEL_DIR
+        raw = _iload(INTEL_DIR / "signals.json", [])
+        sigs = raw.get("signals", []) if isinstance(raw, dict) else (raw or [])
+        for s in sigs:
+            items.append({"severity": s.get("severity", "low"), "kind": "external_signal",
+                          "title": f"[ext] {s.get('title', '')}",
+                          "detail": f"{s.get('kind', 'news')} · {s.get('source', 'seed')}"
+                                    + (f" · affects mission {s.get('related_mission')}" if s.get("related_mission") else ""),
+                          "ref": s.get("id")})
+    except Exception:
+        pass
 
     sev_rank = {"critical": 0, "high": 1, "medium": 2, "low": 3}
     items.sort(key=lambda x: sev_rank.get(x["severity"], 9))

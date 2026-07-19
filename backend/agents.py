@@ -49,14 +49,23 @@ def _run(cmd: str, timeout: int = 20) -> tuple[int, str]:
         return 1, str(e)
 
 
+import time as _time
+
+_DETECT_CACHE = {}  # name -> (ts, result)
+_DETECT_TTL = 30.0
+
 def _detect_one(spec: dict) -> dict:
+    name = spec["name"]
+    cached = _DETECT_CACHE.get(name)
+    if cached and (_time.time() - cached[0]) < _DETECT_TTL:
+        return cached[1]
     rc, _ = _run(spec["detect_cmd"], timeout=10)
     installed = rc == 0
     needs_auth = False
     if installed and spec.get("auth_check"):
         rc_a, _ = _run(spec["auth_check"], timeout=10)
         needs_auth = rc_a != 0
-    return {
+    result = {
         "name": spec["name"],
         "label": spec.get("label", spec["name"]),
         "tier": spec.get("tier", ""),
@@ -66,6 +75,8 @@ def _detect_one(spec: dict) -> dict:
         "needs_auth": needs_auth,
         "status": "online" if installed and not needs_auth else ("needs_auth" if installed else "missing"),
     }
+    _DETECT_CACHE[name] = (_time.time(), result)
+    return result
 
 
 @router.get("/discover")
