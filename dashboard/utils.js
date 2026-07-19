@@ -131,6 +131,7 @@ const PAGE_TITLES = {
   'smart-router': { title: 'Smart Router', breadcrumb: 'Task routing intelligence' },
   'learning-analytics': { title: 'Learning Analytics', breadcrumb: 'Skill improvement tracking' },
   'session-replay': { title: 'Session Replay', breadcrumb: 'Conversation history playback' },
+  ops: { title: 'Operations', breadcrumb: 'Decision-first command surface' },
   agents: { title: 'Agent Registry', breadcrumb: 'Auto-detect · install · remediate' },
   mission: { title: 'Mission Control', breadcrumb: 'Per-agent status · tasks · cost' },
   panels: { title: 'Brainstorm Panel', breadcrumb: 'Fan-out to all online agents' },

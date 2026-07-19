@@ -1,0 +1,47 @@
+[
+  {
+    "ts": "2026-07-19T20:10:08Z",
+    "actor": "human",
+    "action": "mission_created",
+    "id": "08d3086f",
+    "title": "Ship voice chat to prod"
+  },
+  {
+    "ts": "2026-07-19T20:11:50Z",
+    "actor": "human",
+    "action": "intervene:pause",
+    "id": "08d3086f"
+  },
+  {
+    "ts": "2026-07-19T20:12:00Z",
+    "actor": "human",
+    "action": "handoff",
+    "id": "08d3086f",
+    "from": "opencode",
+    "to": "claude"
+  },
+  {
+    "ts": "2026-07-19T20:12:00Z",
+    "actor": "human",
+    "action": "agent_control",
+    "agent": "opencode",
+    "autonomy": "manual",
+    "paused": true
+  },
+  {
+    "ts": "2026-07-19T20:14:43Z",
+    "actor": "human",
+    "action": "agent_control",
+    "agent": "opencode",
+    "autonomy": "manual",
+    "paused": true
+  },
+  {
+    "ts": "2026-07-19T20:15:02Z",
+    "actor": "human",
+    "action": "agent_control",
+    "agent": "opencode",
+    "autonomy": "autonomous",
+    "paused": false
+  }
+]

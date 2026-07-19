@@ -84,6 +84,14 @@ const api = {
   studioOauthStatus: () => api.get('/api/studio/oauth-status'),
   // B: Mission Control
   missionOverview: () => api.get('/api/mission-control/overview'),
+  // OPS: executive operating system
+  opsBrief: () => api.get('/api/ops/brief'),
+  opsMissions: () => api.get('/api/ops/missions'),
+  opsCreateMission: (m) => api.post('/api/ops/missions', m),
+  opsHandoff: (id, p) => api.post(`/api/ops/missions/${id}/handoff`, p),
+  opsIntervene: (id, p) => api.post(`/api/ops/missions/${id}/intervene`, { action: p }),
+  opsAgentControl: () => api.get('/api/ops/agent-control'),
+  opsSetAgentControl: (name, p) => api.post(`/api/ops/agent-control/${name}`, p),
   completeKanbanTask: (id, summary) => api.post(`/api/kanban/tasks/${encodeURIComponent(id)}/complete`, { summary }),
   blockKanbanTask: (id, reason) => api.post(`/api/kanban/tasks/${encodeURIComponent(id)}/block`, { reason }),
   unblockKanbanTask: (id) => api.post(`/api/kanban/tasks/${encodeURIComponent(id)}/unblock`, {}),

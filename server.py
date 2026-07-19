@@ -33,6 +33,7 @@ from backend.ide import router as ide_router
 from backend.kanban_worker import router as kanban_worker_router
 from backend.youtube import router as youtube_router
 from backend.mission_control import router as mission_control_router
+from backend.ops import router as ops_router
 
 _scheduler_instance = None
 
@@ -62,6 +63,7 @@ app.include_router(ide_router)
 app.include_router(kanban_worker_router)
 app.include_router(youtube_router)
 app.include_router(mission_control_router)
+app.include_router(ops_router)
 
 # Load OpenRouter API key from Hermes .env
 HERMES_ENV = Path.home() / ".hermes" / ".env"

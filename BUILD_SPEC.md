@@ -122,6 +122,29 @@ ports (8080/8090/3000) instead of hardcoded 8080.
           Google Cloud OAuth token at data/youtube_token.json to PUBLISH. Visuals are
           local ffmpeg text-slides (AI imagery is a later swap).
 - [x] SHIP: P0-P5 built, each verified live (ad-hoc scripts ALL PASSED), committed + pushed.
+- [x] A/B/C hardening (prior turn): install recipes fixed (real cmds), Mission Control tab,
+        premium glass redesign + animations.
+- [x] OPS — Executive Operating System (this turn).
+        VERIFIED 2026-07-20 (ad-hoc ALL PASSED; py_compile rc0; 30 JS node --check 0 fails):
+        - Encoding fix: replaced StaticFiles mount with charset-aware handler
+          (text/html+js+css+json => charset=utf-8). KILLS mojibake (â / âœ). Confirmed
+          visually in browser + content-type header. Commit e5a89f4.
+        - backend/ops.py: CEO Brief (decision-first; severity-ranked exceptions/risks/blocked/
+          auth/spend/approvals), Mission Board (outcome-driven: owner, intended_result,
+          confidence, next_decision, escalation, evidence, append-only audit), Agent Control
+          (autonomy autonomous|manual|elevated, pause/resume, handoff=ownership transfer,
+          one-click intervene pause/resume/escalate/close, ops_audit.json trail).
+        - Frontend: dashboard/pages/ops.js (Operations command surface) + nav entry (🛰,
+          top-level under Dashboard) + api wrappers. Brief + mission cards + agent control
+          all render live (browser smoke confirmed: glyphs clean, blocked mission surfaces
+          as HIGH in brief, opencode manual+paused persisted).
+        - Motion: operational-feedback only (brief-row urgency border, mission-card status
+          accent, toast slide). No sci-fi animation added.
+        - Seed mission "Ship voice chat to prod" (blocked, owner claude) left as demo data.
+        GOTCHA: JSON API responses don't declare charset (FastAPI default) but are UTF-8 by
+          spec; browsers decode correctly (no mojibake seen). Static assets now force utf-8.
+- [ ] NEXT OPTIONAL: morning brief automation (cron), approve-deadline timestamps on missions,
+        replay viewer for ops_audit.json, live cost hook from worker log-cost.
 
 ## DEPLOYMENT NOTES (verified)
 - Start: cd agentic-os-build && . .venv/Scripts/activate && python server.py --port 8090
