@@ -24,6 +24,10 @@ from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+# ─── Extension routers (P1+) ───────────────────────────────────────
+from backend.tts import router as tts_router
+from backend.memory_ext import router as memory_ext_router
+
 _scheduler_instance = None
 
 @asynccontextmanager
@@ -44,6 +48,8 @@ async def lifespan(app: FastAPI):
             pass
 
 app = FastAPI(title="Agentic OS", version="1.1.0", lifespan=lifespan)
+app.include_router(tts_router)
+app.include_router(memory_ext_router)
 
 # Load OpenRouter API key from Hermes .env
 HERMES_ENV = Path.home() / ".hermes" / ".env"

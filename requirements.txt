@@ -3,3 +3,11 @@ uvicorn[standard]>=0.32.0
 apscheduler>=3.10.0
 pydantic>=2.0.0
 python-multipart>=0.0.12
+# ─── P1+ extensions ───
+openai>=1.30.0                 # TTS via Nous/OpenAI-compatible
+pywinpty>=2.0.0; sys_platform == 'win32'   # xterm PTY on Windows (P3)
+websockets>=12.0               # live logs (P2/P3)
+moviepy>=1.0.3                 # video assembly (P5)
+google-api-python-client>=2.120.0   # YouTube Data API (P5)
+google-auth-oauthlib>=1.2.0    # YouTube OAuth (P5)
+omnirexflora-omnimemory>=0.1.0; python_version < '3.12'  # optional failover memory

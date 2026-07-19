@@ -3,7 +3,7 @@
   "theme": "dark",
   "agents": { "opencode": true, "hermes": true, "gemini": true },
   "obsidian": {
-    "path": "C:/Users/mrmts/Documents/Obsidian",
+    "path": "C:/Users/mrmts/Documents/AgenticOS_Vault",
     "failover_to_omnimemory": true,
     "omnimemory_url": "http://localhost:8001"
   },

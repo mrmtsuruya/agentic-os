@@ -30,6 +30,10 @@ const api = {
   getBrain: () => api.get('/api/brain'),
   getBrainFile: (name) => api.get(`/api/brain/${encodeURIComponent(name)}`),
   updateBrainFile: (name, content) => api.put(`/api/brain/${encodeURIComponent(name)}`, { content }),
+  // P1: Obsidian vault
+  obsidianStatus: () => api.get('/api/memory/obsidian'),
+  obsidianNote: (name) => api.get(`/api/memory/obsidian/note?name=${encodeURIComponent(name)}`),
+  saveObsidianNote: (name, content) => api.post('/api/memory/obsidian/note', { name, content }),
   getSkills: () => api.get('/api/skills'),
   getSkill: (name) => api.get(`/api/skills/${encodeURIComponent(name)}`),
   runSkill: (name, input = '', agent = 'auto') => api.post(`/api/skills/${encodeURIComponent(name)}/run`, { input, agent }),

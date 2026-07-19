@@ -54,8 +54,10 @@ async function renderChat() {
         </div>
         <div class="chat-input-area">
           <div class="chat-agent-indicator" id="chatAgentIndicator">opencode</div>
-          <textarea id="chatInput" class="chat-input" rows="1" placeholder="Type a message..." onkeydown="handleChatKey(event)"></textarea>
+          <button class="btn btn-icon" id="chatMicBtn" onclick="toggleMic()" title="Voice input (Web Speech)">🎤</button>
+          <textarea id="chatInput" class="chat-input" rows="1" placeholder="Type or speak a message..." onkeydown="handleChatKey(event)"></textarea>
           <button class="btn btn-primary btn-icon" onclick="sendChatMessage()" id="chatSendBtn" title="Send">➤</button>
+          <button class="btn btn-icon" id="chatSpeakerBtn" onclick="toggleSpeaker()" title="Read replies aloud (TTS)" style="opacity:.5">🔊</button>
         </div>
       </div>
     </div>
@@ -136,6 +138,7 @@ async function sendChatMessage() {
     clearTimeout(timeoutId);
     removeTypingIndicator(typingId);
     addChatMessage('assistant', r.response.content, agent);
+    speakText(r.response.content);
 
     // Store in local history
     window._chatHistory.push({ role: 'user', content: message, agent });
@@ -245,4 +248,78 @@ function sendQuickPrompt(agent, message) {
   selectAgent(agent);
   document.getElementById('chatInput').value = message;
   sendChatMessage();
+}
+
+// ─── P1: Voice (Web Speech STT + OpenAI/Nous TTS) ─────────────────
+let _micRecognition = null;
+let _micListening = false;
+let _speakerOn = false;
+
+function toggleMic() {
+  const btn = document.getElementById('chatMicBtn');
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    btn.title = 'Web Speech not supported in this browser';
+    btn.style.opacity = 0.4;
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!_micRecognition) {
+    _micRecognition = new SR();
+    _micRecognition.continuous = false;
+    _micRecognition.interimResults = true;
+    _micRecognition.lang = 'en-US';
+    _micRecognition.onresult = (e) => {
+      let txt = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) txt += e.results[i][0].transcript;
+      const input = document.getElementById('chatInput');
+      if (input) input.value = txt;
+      autoResizeTextarea(input);
+    };
+    _micRecognition.onend = () => {
+      _micListening = false;
+      btn.style.opacity = 1;
+      btn.textContent = '🎤';
+    };
+    _micRecognition.onerror = () => {
+      _micListening = false;
+      btn.style.opacity = 1;
+      btn.textContent = '🎤';
+    };
+  }
+  if (_micListening) {
+    _micRecognition.stop();
+  } else {
+    _micRecognition.start();
+    _micListening = true;
+    btn.style.opacity = 1;
+    btn.textContent = '🔴';
+  }
+}
+
+function toggleSpeaker() {
+  _speakerOn = !_speakerOn;
+  const btn = document.getElementById('chatSpeakerBtn');
+  btn.style.opacity = _speakerOn ? 1 : 0.5;
+  btn.textContent = _speakerOn ? '🔊' : '🔇';
+}
+
+async function speakText(text) {
+  if (!_speakerOn) return;
+  try {
+    const r = await fetch('/api/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text.slice(0, 4000) })
+    });
+    if (!r.ok) {
+      console.warn('TTS unavailable:', r.status);
+      return;
+    }
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.play();
+  } catch (e) {
+    console.warn('TTS error:', e);
+  }
 }
