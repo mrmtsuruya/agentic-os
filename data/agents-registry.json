@@ -1,0 +1,104 @@
+{
+  "agents": [
+    {
+      "name": "claude",
+      "label": "Claude (Anthropic CLI)",
+      "tier": "flagship",
+      "detect_cmd": "command -v claude",
+      "install": "npm install -g @anthropic-ai/claude-code",
+      "auth_check": "test -f \"$HOME/.claude.json\" || test -f \"$HOME/.config/claude/config.json\"",
+      "auth_fix": "echo 'Run: claude login'",
+      "remediation": { "stale": "npm install -g @anthropic-ai/claude-code", "crash": "npm install -g @anthropic-ai/claude-code" }
+    },
+    {
+      "name": "codex",
+      "label": "Codex (OpenAI CLI)",
+      "tier": "coding",
+      "detect_cmd": "command -v codex",
+      "install": "npm install -g @openai/codex",
+      "auth_check": "test -n \"$OPENAI_API_KEY\" || test -f \"$HOME/.config/codex/auth.json\"",
+      "auth_fix": "echo 'Set OPENAI_API_KEY or run codex login'",
+      "remediation": { "stale": "npm install -g @openai/codex", "crash": "npm install -g @openai/codex" }
+    },
+    {
+      "name": "kimi",
+      "label": "Kimi Code",
+      "tier": "coding",
+      "detect_cmd": "command -v kimi",
+      "install": "npm install -g @moonshot/kimi-code",
+      "auth_check": "test -n \"$KIMI_API_KEY\"",
+      "auth_fix": "echo 'Set KIMI_API_KEY'",
+      "remediation": { "stale": "npm install -g @moonshot/kimi-code", "crash": "npm install -g @moonshot/kimi-code" }
+    },
+    {
+      "name": "glm",
+      "label": "GLM Code",
+      "tier": "coding",
+      "detect_cmd": "command -v glm",
+      "install": "npm install -g @zhipuai/glm-cli",
+      "auth_check": "test -n \"$GLM_API_KEY\"",
+      "auth_fix": "echo 'Set GLM_API_KEY'",
+      "remediation": { "stale": "npm install -g @zhipuai/glm-cli", "crash": "npm install -g @zhipuai/glm-cli" }
+    },
+    {
+      "name": "antigravity",
+      "label": "Antigravity",
+      "tier": "coding",
+      "detect_cmd": "command -v antigravity",
+      "install": "npm install -g @antigravity/cli",
+      "auth_check": "test -n \"$ANTIGRAVITY_TOKEN\"",
+      "auth_fix": "echo 'Set ANTIGRAVITY_TOKEN'",
+      "remediation": { "stale": "npm install -g @antigravity/cli", "crash": "npm install -g @antigravity/cli" }
+    },
+    {
+      "name": "grok",
+      "label": "Grok Build",
+      "tier": "coding",
+      "detect_cmd": "command -v grok",
+      "install": "npm install -g @xai/grok-cli",
+      "auth_check": "test -n \"$GROK_API_KEY\"",
+      "auth_fix": "echo 'Set GROK_API_KEY'",
+      "remediation": { "stale": "npm install -g @xai/grok-cli", "crash": "npm install -g @xai/grok-cli" }
+    },
+    {
+      "name": "opencode",
+      "label": "opencode",
+      "tier": "coding",
+      "detect_cmd": "command -v opencode",
+      "install": "npm install -g opencode-ai",
+      "auth_check": "test -d \"$HOME/.config/opencode\"",
+      "auth_fix": "echo 'opencode needs no login; ensure config exists'",
+      "remediation": { "stale": "npm install -g opencode-ai", "crash": "npm install -g opencode-ai" }
+    },
+    {
+      "name": "hermes",
+      "label": "Hermes Agent",
+      "tier": "orchestrator",
+      "detect_cmd": "command -v hermes",
+      "install": "curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash",
+      "auth_check": "test -f \"$HOME/.hermes/config.json\"",
+      "auth_fix": "echo 'Run: hermes setup'",
+      "remediation": { "stale": "curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash", "crash": "curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash" }
+    },
+    {
+      "name": "gemini",
+      "label": "Gemini CLI",
+      "tier": "research",
+      "detect_cmd": "command -v gemini",
+      "install": "npm install -g @google/gemini-cli",
+      "auth_check": "test -f \"$HOME/.gemini/oauth_creds.json\" || test -n \"$GEMINI_API_KEY\"",
+      "auth_fix": "echo 'Run: gemini auth login'",
+      "remediation": { "stale": "npm install -g @google/gemini-cli", "crash": "npm install -g @google/gemini-cli" }
+    },
+    {
+      "name": "fusion",
+      "label": "Fusion",
+      "tier": "coding",
+      "detect_cmd": "command -v fusion",
+      "install": "npm install -g @fusion/cli",
+      "auth_check": "test -n \"$FUSION_API_KEY\"",
+      "auth_fix": "echo 'Set FUSION_API_KEY'",
+      "remediation": { "stale": "npm install -g @fusion/cli", "crash": "npm install -g @fusion/cli" }
+    }
+  ]
+}

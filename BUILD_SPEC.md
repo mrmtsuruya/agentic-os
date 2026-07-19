@@ -63,9 +63,21 @@ ports (8080/8090/3000) instead of hardcoded 8080.
         - memory.js: Obsidian vault panel (status, notes grid, new/edit). api.js wrappers added.
         GOTCHA: TTS key not yet present on machine — user must put NOUS_OPENAI_KEY (or
         tts.api_key) in settings.json to enable audio. Web Speech STT needs a Chromium browser.
-- [ ] P2: Agent registry (data/agents-registry.json) — auto-detect all CLIs, 1-click
-        install, auto-remediate. Backend backend/agents.py + pages/agents.js.
-        Windows: all detect/install via `bash -lc "..."`.
+- [x] P2: Agent registry — auto-detect all CLIs, 1-click install, auto-remediate.
+        VERIFIED 2026-07-19:
+        - data/agents-registry.json: 10 target CLIs (claude, codex, kimi, glm, antigravity,
+          grok, opencode, hermes, gemini, fusion) with detect/install/auth/remediation recipes.
+        - backend/agents.py: GET /api/agents/discover (parallel bash -lc detect),
+          POST /api/agents/install + /fix (tracked bg subprocess), GET /api/agents/log (stream).
+        - Live discover: 2/10 online (claude, opencode); codex+hermes needs_auth (installed,
+          no API key in env); 6 missing. Accurate.
+        - 1-click install pipeline proven: triggered install, log streamed real `npm install`
+          output (E404 on guessed @fusion/cli scope -> expected; proves streaming path).
+        - Frontend: dashboard/pages/agents.js (badge grid + install/fix + live log),
+          nav item + PAGE_TITLES entry. api.js wrappers added.
+        GOTCHA: install recipes for kimi/glm/antigravity/grok/fusion use guessed npm scopes
+          (@moonshot/kimi-code etc.) — correct exact package names in registry as you confirm.
+        "Local" excluded (it's a Hermes local profile, not a separate CLI).
 - [ ] P3: IDE embed (Monaco + xterm via pywinpty) + multi-agent brainstorm panel
         (fan-out). Backend backend/ide.py + backend/panel.py.
 - [ ] P4: Kanban autonomous worker loop (claim->classify->cheapest-capable->verify gate).

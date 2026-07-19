@@ -131,4 +131,5 @@ const PAGE_TITLES = {
   'smart-router': { title: 'Smart Router', breadcrumb: 'Task routing intelligence' },
   'learning-analytics': { title: 'Learning Analytics', breadcrumb: 'Skill improvement tracking' },
   'session-replay': { title: 'Session Replay', breadcrumb: 'Conversation history playback' },
+  agents: { title: 'Agent Registry', breadcrumb: 'Auto-detect · install · remediate' },
 };

@@ -34,6 +34,11 @@ const api = {
   obsidianStatus: () => api.get('/api/memory/obsidian'),
   obsidianNote: (name) => api.get(`/api/memory/obsidian/note?name=${encodeURIComponent(name)}`),
   saveObsidianNote: (name, content) => api.post('/api/memory/obsidian/note', { name, content }),
+  // P2: Agent registry
+  discoverAgents: () => api.get('/api/agents/discover'),
+  installAgent: (name) => api.post('/api/agents/install', { name }),
+  fixAgent: (name, kind) => api.post('/api/agents/fix', { name, kind }),
+  agentLog: (name) => api.get(`/api/agents/log?name=${encodeURIComponent(name)}`),
   getSkills: () => api.get('/api/skills'),
   getSkill: (name) => api.get(`/api/skills/${encodeURIComponent(name)}`),
   runSkill: (name, input = '', agent = 'auto') => api.post(`/api/skills/${encodeURIComponent(name)}/run`, { input, agent }),
