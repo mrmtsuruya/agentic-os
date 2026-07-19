@@ -1550,11 +1550,45 @@ def get_session_replay(session_id: str):
     except Exception as e:
         return {"session_id": session_id, "messages": [], "error": str(e)}
 
-# ─── Routes: Dashboard Static Files ──────────────────────────────
+# ─── Routes: Dashboard Static Files (charset-aware; fixes mojibake) ──
 
 dashboard_dir = BASE_DIR / "dashboard"
-if dashboard_dir.exists():
-    app.mount("/dashboard", StaticFiles(directory=str(dashboard_dir)), name="dashboard")
+
+import os as _os
+
+_CHARSER_TYPES = {
+    ".html": "text/html; charset=utf-8",
+    ".js": "application/javascript; charset=utf-8",
+    ".css": "text/css; charset=utf-8",
+    ".json": "application/json; charset=utf-8",
+    ".svg": "image/svg+xml",
+    ".png": "image/png",
+    ".ico": "image/x-icon",
+    ".woff2": "font/woff2",
+}
+
+@app.get("/dashboard/{full_path:path}")
+def dashboard_static(full_path: str):
+    # safety: block path traversal
+    cand = (dashboard_dir / full_path).resolve()
+    if not str(cand).startswith(str(dashboard_dir.resolve())):
+        from fastapi.responses import JSONResponse as _JR
+        return _JR(status_code=400, content={"error": "invalid path"})
+    if cand.is_dir():
+        cand = cand / "index.html"
+    if not cand.exists():
+        from fastapi.responses import JSONResponse as _JR
+        return _JR(status_code=404, content={"error": "not found"})
+    ext = _os.path.splitext(str(cand))[1].lower()
+    ctype = _CHARSER_TYPES.get(ext, "application/octet-stream")
+    from fastapi.responses import Response as _Resp
+    return _Resp(content=cand.read_bytes(), media_type=ctype)
+
+# Also serve dashboard root at /dashboard/ (optional)
+@app.get("/dashboard")
+@app.get("/dashboard/")
+def dashboard_root():
+    return dashboard_static("index.html")
 
 @app.get("/", response_class=HTMLResponse)
 def index():
