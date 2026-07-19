@@ -55,10 +55,26 @@ if HERMES_ENV.exists():
             if k == "OPENROUTER_API_KEY":
                 os.environ[k] = v  # last value wins (matches shell sourcing)
 
-# CORS for local dev
+# CORS for local dev — origins derived from settings + common local ports
+def _load_cors_origins() -> list:
+    origins = set()
+    try:
+        sfile = BASE_DIR / "data" / "settings.json"
+        if sfile.exists():
+            d = json.loads(sfile.read_text())
+            port = d.get("dashboard", {}).get("port", 8090)
+        else:
+            port = 8090
+    except Exception:
+        port = 8090
+    for p in (port, 8080, 8090, 3000):
+        origins.add(f"http://127.0.0.1:{p}")
+        origins.add(f"http://localhost:{p}")
+    return sorted(origins)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8080", "http://localhost:8080"],
+    allow_origins=_load_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -1587,7 +1603,7 @@ def service_worker():
 if __name__ == "__main__":
     import uvicorn
     parser = argparse.ArgumentParser()
-    parser.add_argument("--port", type=int, default=8080)
+    parser.add_argument("--port", type=int, default=8090)
     parser.add_argument("--host", type=str, default="127.0.0.1")
     args = parser.parse_args()
     uvicorn.run(app, host=args.host, port=args.port)

@@ -14,9 +14,9 @@ fi
 pip3 install -r requirements.txt --quiet 2>/dev/null
 
 # Get port from settings or default
-PORT=8080
+PORT=8090
 if command -v python3 &>/dev/null; then
-    PORT=$(python3 -c "import json; f=open('data/settings.json'); d=json.load(f); print(d.get('dashboard',{}).get('port',8080)); f.close()" 2>/dev/null || echo "8080")
+    PORT=$(python3 -c "import json; f=open('data/settings.json'); d=json.load(f); print(d.get('dashboard',{}).get('port',8090)); f.close()" 2>/dev/null || echo "8090")
 fi
 
 echo "Dashboard: http://127.0.0.1:${PORT}"

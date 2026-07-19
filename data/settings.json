@@ -1,0 +1,21 @@
+{
+  "dashboard": { "port": 8090 },
+  "theme": "dark",
+  "agents": { "opencode": true, "hermes": true, "gemini": true },
+  "obsidian": {
+    "path": "C:/Users/mrmts/Documents/Obsidian",
+    "failover_to_omnimemory": true,
+    "omnimemory_url": "http://localhost:8001"
+  },
+  "tts": {
+    "provider": "openai",
+    "model": "gpt-4o-mini-tts",
+    "voice": "nova"
+  },
+  "youtube": {
+    "publish_gate": "human_approve",
+    "channel_ready": true,
+    "oauth_client_configured": false
+  },
+  "kanban_autopilot": { "enabled": false }
+}
