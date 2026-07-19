@@ -60,6 +60,8 @@ def _detect_one(spec: dict) -> dict:
         "name": spec["name"],
         "label": spec.get("label", spec["name"]),
         "tier": spec.get("tier", ""),
+        "install_type": spec.get("install_type", "npm"),
+        "provider_note": spec.get("provider_note", ""),
         "installed": installed,
         "needs_auth": needs_auth,
         "status": "online" if installed and not needs_auth else ("needs_auth" if installed else "missing"),
@@ -85,8 +87,10 @@ def install(payload: dict):
     spec = next((s for s in _registry().get("agents", []) if s["name"] == name), None)
     if not spec:
         raise HTTPException(status_code=404, detail=f"unknown agent {name}")
+    if spec.get("install_type") == "provider":
+        return {"status": "provider", "name": name,
+                "message": spec.get("provider_note", "Provider-only: no standalone binary to install.")}
     if spec.get("install"):
-        # fire-and-forget tracked install
         t = threading.Thread(target=_run_install, args=(spec,), daemon=True)
         t.start()
         return {"status": "install_started", "name": name}

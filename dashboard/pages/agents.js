@@ -34,20 +34,27 @@ async function refreshAgents() {
     summary.innerHTML = `<span class="badge badge-info">${data.online}/${data.total} online</span>`;
     grid.className = '';
     grid.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">${agents.map(a => {
+      const isProvider = a.install_type === 'provider';
       const color = a.status === 'online' ? 'badge-success' : (a.status === 'needs_auth' ? 'badge-warning' : 'badge-danger');
       const label = a.status === 'online' ? 'ONLINE' : (a.status === 'needs_auth' ? 'NEEDS AUTH' : 'MISSING');
-      const actions = a.status === 'missing'
-        ? `<button class="btn btn-sm btn-primary" onclick="installAgent('${a.name}')">⬇ Install</button>`
-        : (a.status === 'needs_auth'
-            ? `<button class="btn btn-sm" onclick="showToast('Auth: '+'${(a.name)}', 'info')">🔑 Auth needed</button>`
-            : `<button class="btn btn-sm" onclick="fixAgent('${a.name}','stale')">🔧 Reinstall</button>`);
+      let actions;
+      if (isProvider) {
+        actions = `<span class="badge badge-neutral">PROVIDER</span>`;
+      } else if (a.status === 'missing') {
+        actions = `<button class="btn btn-sm btn-primary" onclick="installAgent('${a.name}')">⬇ Install</button>`;
+      } else if (a.status === 'needs_auth') {
+        actions = `<button class="btn btn-sm" onclick="showToast('Auth: ${a.name}', 'info')">🔑 Auth needed</button>`;
+      } else {
+        actions = `<button class="btn btn-sm" onclick="fixAgent('${a.name}','stale')">🔧 Reinstall</button>`;
+      }
+      const note = isProvider ? `<div style="font-size:10px;color:var(--text-muted);margin-top:6px">${escapeHtml(a.provider_note || '')}</div>` : '';
       return `<div class="card">
         <div class="flex items-center justify-between mb-2">
           <span class="card-title">${escapeHtml(a.label)}</span>
           <span class="badge ${color}">${label}</span>
         </div>
         <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">tier: ${escapeHtml(a.tier)}</div>
-        <div class="flex gap-2">${actions}</div>
+        <div class="flex gap-2">${actions}</div>${note}
       </div>`;
     }).join('')}</div>`;
   } catch (err) {
@@ -58,7 +65,11 @@ async function refreshAgents() {
 
 async function installAgent(name) {
   try {
-    await api.installAgent(name);
+    const r = await api.installAgent(name);
+    if (r.status === 'provider') {
+      showToast(r.message || 'Provider-only: no binary to install', 'info');
+      return;
+    }
     showToast(`Installing ${name}…`, 'success');
     pollAgentLog(name);
   } catch (err) {
