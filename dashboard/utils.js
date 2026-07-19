@@ -134,4 +134,5 @@ const PAGE_TITLES = {
   agents: { title: 'Agent Registry', breadcrumb: 'Auto-detect · install · remediate' },
   panels: { title: 'Brainstorm Panel', breadcrumb: 'Fan-out to all online agents' },
   ide: { title: 'IDE', breadcrumb: 'Monaco editor + terminal' },
+  studio: { title: 'Studio', breadcrumb: 'YouTube autopilot (human-approved)' },
 };
