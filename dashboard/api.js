@@ -70,6 +70,10 @@ const api = {
   getKanbanTask: (id) => api.get(`/api/kanban/tasks/${encodeURIComponent(id)}`),
   createKanbanTask: (data) => api.post('/api/kanban/tasks', data),
   updateKanbanTask: (id, data) => api.patch(`/api/kanban/tasks/${encodeURIComponent(id)}`, data),
+  // P4: Kanban worker
+  kanbanWorkerStatus: () => api.get('/api/kanban-worker/status'),
+  kanbanWorkerRun: () => api.post('/api/kanban-worker/run-once', {}),
+  kanbanWorkerToggle: (enabled) => api.post('/api/kanban-worker/toggle', { enabled }),
   completeKanbanTask: (id, summary) => api.post(`/api/kanban/tasks/${encodeURIComponent(id)}/complete`, { summary }),
   blockKanbanTask: (id, reason) => api.post(`/api/kanban/tasks/${encodeURIComponent(id)}/block`, { reason }),
   unblockKanbanTask: (id) => api.post(`/api/kanban/tasks/${encodeURIComponent(id)}/unblock`, {}),

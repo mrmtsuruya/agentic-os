@@ -30,6 +30,7 @@ from backend.memory_ext import router as memory_ext_router
 from backend.agents import router as agents_router
 from backend.panel import router as panel_router
 from backend.ide import router as ide_router
+from backend.kanban_worker import router as kanban_worker_router
 
 _scheduler_instance = None
 
@@ -56,6 +57,7 @@ app.include_router(memory_ext_router)
 app.include_router(agents_router)
 app.include_router(panel_router)
 app.include_router(ide_router)
+app.include_router(kanban_worker_router)
 
 # Load OpenRouter API key from Hermes .env
 HERMES_ENV = Path.home() / ".hermes" / ".env"

@@ -92,8 +92,20 @@ ports (8080/8090/3000) instead of hardcoded 8080.
           lacks P3). If a Python import ever resolves there first it loads the wrong
           server. Authoritative build = C:/Users/mrmts/agentic-os-build. Recommend
           deleting or ignoring the Projects copy to avoid confusion.
-- [ ] P4: Kanban autonomous worker loop (claim→cheapest-capable→verify gate).
-        Backend backend/kanban_worker.py + kanban.js autopilot toggle.
+- [x] P4: Kanban autonomous worker loop (claim→cheapest-capable→verify gate).
+        VERIFIED 2026-07-20:
+        - backend/kanban_worker.py: scans todo/ready unassigned tasks, classifies
+          (development/devops/research/content/study/general), picks CHEAPEST CAPABLE
+          online agent (tier prefs in module), dispatches via server.execute_agent(),
+          VERIFY GATE (fail-closed: marks done only if non-empty agent output; else
+          blocked with reason — model does NOT self-certify correctness).
+        - POST /api/kanban-worker/run-once, /toggle (30s poll loop), /status.
+        - Live: created todo task -> worker claimed (opencode, dev) -> done,
+          verified=agent_output_present. Ad-hoc script ALL PASSED.
+        - Frontend: kanban.js autopilot toggle (⚙ Autopilot ON/OFF) + status line +
+          runWorkerOnce(). api.js wrappers added.
+        NOTE: "verified" means agent produced output, not test-verified-correct. A
+          future hook can run unit tests for code tasks; currently human-review gate.
 - [ ] P5: Studio/YouTube autopilot. Backend backend/youtube.py + pages/studio.js.
         Needs Google OAuth client (setup script). Human-approve gate.
 

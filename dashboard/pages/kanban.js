@@ -11,8 +11,10 @@ async function renderKanban() {
       <div class="btn-group">
         <button class="btn btn-primary" onclick="showAddKanbanTask()">+ Add Task</button>
         <button class="btn btn-ghost" onclick="renderKanban()">🔄 Refresh</button>
+        <button class="btn btn-sm" id="workerToggleBtn" onclick="toggleKanbanWorker()">⚙ Autopilot: OFF</button>
       </div>
     </div>
+    <div id="workerStatus" style="font-size:11px;color:var(--text-muted);margin-bottom:8px"></div>
     <div class="kanban-toolbar">
       <input class="form-input" id="kanbanFilterInput" placeholder="Filter tasks..." oninput="filterKanbanTasks()" style="flex:1;max-width:280px">
       <select class="form-select" id="kanbanFilterPriority" onchange="filterKanbanTasks()" style="width:120px">
@@ -42,6 +44,7 @@ async function loadKanbanData() {
     const data = await api.getKanbanBoard();
     kanbanData = data;
     renderKanbanBoard();
+    refreshWorkerStatus();
   } catch (err) {
     const board = document.getElementById('kanbanBoard');
     if (board) board.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-title">Failed to load kanban</div><div class="empty-state-desc">${escapeHtml(err.message)}</div></div>`;
@@ -287,4 +290,41 @@ async function deleteKanbanTask(id) {
 
 function filterKanbanTasks() {
   renderKanbanBoard();
+}
+
+// ─── P4: Autonomous Kanban worker ───────────────────────────────
+async function refreshWorkerStatus() {
+  try {
+    const s = await api.kanbanWorkerStatus();
+    const btn = document.getElementById('workerToggleBtn');
+    const box = document.getElementById('workerStatus');
+    if (btn) btn.textContent = s.running ? '⚙ Autopilot: ON' : '⚙ Autopilot: OFF';
+    if (box) {
+      const last = s.last_run ? `last run ${s.last_run}` : 'never run';
+      const cnt = s.last_result ? s.last_result.count : 0;
+      box.textContent = `Autopilot ${s.running ? 'running' : 'off'} · ${last} · last sweep claimed ${cnt}`;
+    }
+  } catch {}
+}
+
+async function toggleKanbanWorker() {
+  try {
+    const s = await api.kanbanWorkerStatus();
+    const r = await api.kanbanWorkerToggle(!s.running);
+    showToast(`Autopilot ${r.running ? 'ON' : 'OFF'}`, 'success');
+    refreshWorkerStatus();
+  } catch (err) {
+    showToast(`Error: ${err.message}`, 'error');
+  }
+}
+
+async function runWorkerOnce() {
+  try {
+    const r = await api.kanbanWorkerRun();
+    showToast(`Worker claimed ${r.count} task(s)`, 'success');
+    renderKanban();
+    refreshWorkerStatus();
+  } catch (err) {
+    showToast(`Error: ${err.message}`, 'error');
+  }
 }
