@@ -78,9 +78,21 @@ ports (8080/8090/3000) instead of hardcoded 8080.
         GOTCHA: install recipes for kimi/glm/antigravity/grok/fusion use guessed npm scopes
           (@moonshot/kimi-code etc.) — correct exact package names in registry as you confirm.
         "Local" excluded (it's a Hermes local profile, not a separate CLI).
-- [ ] P3: IDE embed (Monaco + xterm via pywinpty) + multi-agent brainstorm panel
-        (fan-out). Backend backend/ide.py + backend/panel.py.
-- [ ] P4: Kanban autonomous worker loop (claim->classify->cheapest-capable->verify gate).
+- [x] P3: IDE embed (Monaco+xterm pywinpty) + multi-agent brainstorm panel.
+        VERIFIED 2026-07-20:
+        - backend/panel.py: POST /api/panel/broadcast fans prompt to all ONLINE agents
+          (reuses server.execute_agent). Live: claude+opencode returned ok.
+        - backend/ide.py: GET/POST /api/ide/file (sandbox root = project dir) +
+          WS /api/ide/ws/pty (pywinpty conpty PTY). REST verified (read server.py 60k).
+          WS PTY is browser-only verify (route registered; xterm from CDN).
+        - Frontend: dashboard/pages/panels.js (fan-out grid) + ide.js (Monaco editor +
+          xterm terminal), nav entries + PAGE_TITLES. api.js wrappers added.
+        - pywinpty 3.0.5 + websockets installed in venv.
+        GOTCHA: a STALE clone exists at C:/Users/mrmts/Projects/agentic-os/ (older,
+          lacks P3). If a Python import ever resolves there first it loads the wrong
+          server. Authoritative build = C:/Users/mrmts/agentic-os-build. Recommend
+          deleting or ignoring the Projects copy to avoid confusion.
+- [ ] P4: Kanban autonomous worker loop (claim→cheapest-capable→verify gate).
         Backend backend/kanban_worker.py + kanban.js autopilot toggle.
 - [ ] P5: Studio/YouTube autopilot. Backend backend/youtube.py + pages/studio.js.
         Needs Google OAuth client (setup script). Human-approve gate.

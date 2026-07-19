@@ -39,6 +39,10 @@ const api = {
   installAgent: (name) => api.post('/api/agents/install', { name }),
   fixAgent: (name, kind) => api.post('/api/agents/fix', { name, kind }),
   agentLog: (name) => api.get(`/api/agents/log?name=${encodeURIComponent(name)}`),
+  // P3: Brainstorm panel + IDE
+  panelBroadcast: (prompt, agents = []) => api.post('/api/panel/broadcast', { prompt, agents }),
+  ideRead: (path) => api.get(`/api/ide/file?path=${encodeURIComponent(path)}`),
+  ideWrite: (path, content) => api.post('/api/ide/file', { path, content }),
   getSkills: () => api.get('/api/skills'),
   getSkill: (name) => api.get(`/api/skills/${encodeURIComponent(name)}`),
   runSkill: (name, input = '', agent = 'auto') => api.post(`/api/skills/${encodeURIComponent(name)}/run`, { input, agent }),
