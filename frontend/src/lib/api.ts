@@ -47,6 +47,62 @@ export type Mission = {
   updated: string;
 };
 
+export type Goal = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  target_date: string;
+  status: string;
+  progress: number;
+  created: string;
+  updated: string;
+};
+
+export type ErrEntry = {
+  id?: string;
+  ts?: string;
+  level?: string;
+  msg?: string;
+  [k: string]: unknown;
+};
+
+export type CostView = {
+  entries: unknown[];
+  daily_totals: Record<string, number>;
+  monthly_projection: number;
+  free_tier_alerts: unknown[];
+};
+
+export type PluginEntry = {
+  name: string;
+  version: string;
+  description: string;
+  author: string;
+  installed: string;
+  type: string;
+};
+
+export type BackupEntry = {
+  id?: string;
+  name?: string;
+  created?: string;
+  path?: string;
+  size?: number;
+  [k: string]: unknown;
+};
+
+export type StdEntry = {
+  name: string;
+  content: string;
+};
+
+export type JournalEntry = {
+  date: string;
+  preview: string;
+  modified: string;
+};
+
 export type AgentControlEntry = {
   name: string;
   status: string;
@@ -115,6 +171,15 @@ export const api = {
   brief: () => get<Brief>("/ops/brief"),
   missions: () => get<{ missions: Mission[] }>("/ops/missions"),
   agentControl: () => get<AgentControl>("/ops/agent-control"),
+  goals: () => get<{ goals: Goal[] }>("/goals"),
+  errors: () => get<{ errors: ErrEntry[] }>("/errors"),
+  cost: () => get<CostView>("/cost"),
+  plugins: () => get<{ plugins: PluginEntry[] }>("/plugins"),
+  backups: () => get<BackupEntry[]>("/backups"),
+  prompts: () => get<Record<string, string>>("/prompts"),
+  standards: () => get<{ standards: StdEntry[] }>("/standards"),
+  memorySearch: (q: string) => get<{ results: unknown[]; entities: unknown[]; query: string }>(`/memory/search?q=${encodeURIComponent(q)}`),
+  journal: () => get<{ entries: JournalEntry[] }>("/journal/entries"),
   audit: () => get<{ audit: TrailEntry[] }>("/ops/audit"),
   intelSignals: () => get<{ signals: unknown[] }>("/intel/signals"),
   intelPlugins: () => get<{ plugins: unknown[] }>("/intel/plugins"),

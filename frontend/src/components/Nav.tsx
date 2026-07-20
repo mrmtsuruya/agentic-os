@@ -10,6 +10,7 @@ const TABS = [
   { page: "missions", label: "Missions", icon: "missions" },
   { page: "intel", label: "Intelligence", icon: "intel" },
   { page: "agents", label: "Agents", icon: "agents" },
+  { page: "mission-control", label: "Mission Control", icon: "target" },
   { page: "trail", label: "Trail", icon: "trail" },
 ] as const;
 
