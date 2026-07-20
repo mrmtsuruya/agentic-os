@@ -30,6 +30,35 @@ function DecisionRow({ d, i }: { d: Decision; i: number }) {
   );
 }
 
+function SeverityBar({ summary }: { summary: Brief["summary"] }) {
+  const { critical, high, medium, low } = summary;
+  const total = Math.max(1, critical + high + medium + low);
+  const segs: [number, string][] = [
+    [critical, "var(--color-danger)"],
+    [high, "var(--color-danger)"],
+    [medium, "var(--color-warn)"],
+    [low, "var(--color-accent)"],
+  ];
+  return (
+    <div
+      title={`${critical} critical · ${high} high · ${medium} medium · ${low} low`}
+      style={{ display: "flex", width: 160, height: 8, borderRadius: 5, overflow: "hidden", background: "var(--color-hairline)" }}
+    >
+      {segs.map(([n, color], i) =>
+        n > 0 ? (
+          <motion.div
+            key={i}
+            initial={{ width: 0 }}
+            animate={{ width: `${(n / total) * 100}%` }}
+            transition={{ duration: 0.4, delay: i * 0.05 }}
+            style={{ background: color }}
+          />
+        ) : null
+      )}
+    </div>
+  );
+}
+
 export default function BriefPage() {
   const [brief, setBrief] = useState<Brief | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -67,7 +96,8 @@ export default function BriefPage() {
           </div>
         </div>
         {brief && (
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginLeft: "auto" }}>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginLeft: "auto", alignItems: "center" }}>
+            <SeverityBar summary={brief.summary} />
             {brief.summary.high > 0 && <span className="chip-danger tnum">{brief.summary.high} high</span>}
             {brief.summary.medium > 0 && <span className="chip-warn tnum">{brief.summary.medium} medium</span>}
             {brief.summary.low > 0 && <span className="chip tnum">{brief.summary.low} low</span>}
@@ -79,6 +109,14 @@ export default function BriefPage() {
           </div>
         )}
       </motion.div>
+
+      {/* Severity distribution — operational signal, not decoration */}
+      {brief && (
+        <div style={{ marginTop: 10, display: "flex", gap: 6, alignItems: "center" }}>
+          <span className="muted" style={{ fontSize: 11 }}>Severity mix</span>
+          <SeverityBar summary={brief.summary} />
+        </div>
+      )}
 
       {/* Decision list */}
       <div className="card" style={{ marginTop: 16 }}>
