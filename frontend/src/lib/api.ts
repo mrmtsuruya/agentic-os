@@ -119,5 +119,6 @@ export const api = {
   kanban: () => get<KanbanBoard>("/kanban/board"),
   schedulerJobs: () => get<SchedulerJob[]>("/scheduler/jobs"),
   chatHistory: () => get<ChatMessage[]>("/chat/history"),
-  chatSend: (message: string) => post<{ reply?: string }>("/chat", { message }),
+  chatSend: (message: string, agent = "hermes") =>
+    post<{ reply?: string }>("/chat", { message, agent }),
 };

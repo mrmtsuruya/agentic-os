@@ -8,6 +8,7 @@ import { Icon } from "@/components/Icon";
 export default function ChatPage() {
   const [msgs, setMsgs] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
+  const [agent, setAgent] = useState<"opencode" | "hermes" | "gemini">("hermes");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
@@ -28,7 +29,7 @@ export default function ChatPage() {
     setMsgs((m) => [...m, { role: "user", content: text }]);
     setInput("");
     try {
-      const r = await api.chatSend(text);
+      const r = await api.chatSend(text, agent);
       setMsgs((m) => [...m, { role: "assistant", content: r.reply ?? "(no reply)" }]);
     } catch (e) {
       setErr(String(e));
@@ -75,6 +76,17 @@ export default function ChatPage() {
       </div>
 
       <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+        <select
+          value={agent}
+          onChange={(e) => setAgent(e.target.value as "opencode" | "hermes" | "gemini")}
+          className="btn"
+          style={{ background: "var(--color-bg-input)", color: "var(--color-ink)" }}
+          aria-label="Agent"
+        >
+          <option value="opencode">opencode</option>
+          <option value="hermes">hermes</option>
+          <option value="gemini">gemini</option>
+        </select>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
