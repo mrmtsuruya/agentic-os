@@ -47,12 +47,17 @@ export type Mission = {
   updated: string;
 };
 
-export type AgentControl = {
+export type AgentControlEntry = {
   name: string;
-  installed: boolean;
+  status: string;
+  tier: string;
   autonomy: string;
-  last_seen?: string;
-}[];
+  paused: boolean;
+};
+
+export type AgentControl = {
+  agents: AgentControlEntry[];
+};
 
 export type TrailEntry = {
   ts: string;
