@@ -7,10 +7,15 @@ every phase with real, verified results (no fabrication).
 ## CANONICAL LOCATIONS
 - Fork repo:        https://github.com/mrmtsuruya/agentic-os.git
 - Upstream:         https://github.com/modimihir07/agentic-os.git
-- Local working dir: C:/Users/mrmts/agentic-os-build  (git clone of the fork)
+- Local working dir: C:/Users/mrmts/Downloads/Agentic OS - free  (git clone of the fork; MOVED from C:/Users/mrmts/agentic-os-build on 2026-07-20)
 - Python:           py -3.11 (NOT python3.11 — not on git-bash PATH). Venv at .venv/.
 - Dashboard URL:    http://127.0.0.1:8090  (PORT MOVED FROM 8080 — see note)
 - Settings:         data/settings.json (gitignored in upstream; we created it)
+- FRONTEND (TS rebuild): C:/Users/mrmts/Downloads/Agentic OS - free/frontend  (Next.js 16 + TS + Tailwind v4 + Framer Motion, App Router, src/ dir)
+  - Dev:  cd frontend && npm run dev -p 3000  -> http://127.0.0.1:3000
+  - Proxy: next.config.ts rewrites /api/* -> http://127.0.0.1:8090/api/* (FastAPI backend unchanged)
+  - NOTE: a stale Next server from "C:/Users/mrmts/Downloads/Agentic OS - Mission Control Dashboard" ALSO binds :3000 (127.0.0.1). Kill it before starting frontend dev or you get 404s on new routes.
+  - tsc --noEmit: PASS (0 errors, verified 2026-07-20).
 
 ## WHY PORT 8090 (not 8080)
 Original repo defaults to 8080. 8080 was previously the dead MT5 bridge port on this
@@ -90,7 +95,7 @@ ports (8080/8090/3000) instead of hardcoded 8080.
         - pywinpty 3.0.5 + websockets installed in venv.
         GOTCHA: a STALE clone exists at C:/Users/mrmts/Projects/agentic-os/ (older,
           lacks P3). If a Python import ever resolves there first it loads the wrong
-          server. Authoritative build = C:/Users/mrmts/agentic-os-build. Recommend
+          server. Authoritative build = C:/Users/mrmts/Downloads/Agentic OS - free. Recommend
           deleting or ignoring the Projects copy to avoid confusion.
 - [x] P4: Kanban autonomous worker loop (claim→cheapest-capable→verify gate).
         VERIFIED 2026-07-20:
@@ -147,7 +152,7 @@ ports (8080/8090/3000) instead of hardcoded 8080.
         replay viewer for ops_audit.json, live cost hook from worker log-cost.
 
 ## DEPLOYMENT NOTES (verified)
-- Start: cd agentic-os-build && . .venv/Scripts/activate && python server.py --port 8090
+- Start: cd "/c/Users/mrmts/Downloads/Agentic OS - free" && . .venv/Scripts/activate && python server.py --port 8090
 - Kill on 8090: find PID via `netstat -ano | grep :8090`, then `taskkill /PID <n> /F`
   (use SINGLE slash in git-bash; double-slash breaks taskkill).
 - Always restart server after editing server.py or backend/*.py (static JS needs no restart

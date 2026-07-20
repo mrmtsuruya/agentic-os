@@ -43,5 +43,29 @@
     "agent": "opencode",
     "autonomy": "autonomous",
     "paused": false
+  },
+  {
+    "ts": "2026-07-20T05:46:47Z",
+    "actor": "human",
+    "action": "agent_control",
+    "agent": "kimi-code",
+    "autonomy": "autonomous",
+    "paused": true
+  },
+  {
+    "ts": "2026-07-20T05:46:54Z",
+    "actor": "human",
+    "action": "agent_control",
+    "agent": "claude",
+    "autonomy": "autonomous",
+    "paused": true
+  },
+  {
+    "ts": "2026-07-20T05:46:57Z",
+    "actor": "human",
+    "action": "agent_control",
+    "agent": "codex",
+    "autonomy": "autonomous",
+    "paused": true
   }
 ]

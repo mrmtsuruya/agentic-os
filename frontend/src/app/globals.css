@@ -1,0 +1,262 @@
+@import "tailwindcss";
+
+/* ─── Agentic OS — design system ────────────────────────────────────
+   Bar: calm/restrained (not sci-fi); one indigo accent + hairlines +
+   tabular numerals; dark glassmorphism. Motion = operational feedback
+   only (state-change / urgency / ownership / completion).
+   ───────────────────────────────────────────────────────────────── */
+
+@theme inline {
+  --color-bg: #0b0d14;
+  --color-bg-elev: #12151f;
+  --color-bg-card: rgba(22, 26, 38, 0.72);
+  --color-bg-card-solid: #161a26;
+  --color-hairline: rgba(255, 255, 255, 0.08);
+  --color-hairline-strong: rgba(255, 255, 255, 0.14);
+
+  --color-ink: #e8eaf0;
+  --color-ink-dim: #9aa3b2;
+  --color-ink-faint: #5b6473;
+
+  /* ONE accent */
+  --color-accent: #6366f1;
+  --color-accent-soft: rgba(99, 102, 241, 0.14);
+  --color-accent-line: rgba(99, 102, 241, 0.40);
+
+  /* semantic — used sparingly, only for urgency/state, not decoration */
+  --color-danger: #f87171;
+  --color-warn: #fbbf24;
+  --color-ok: #34d399;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Inter", "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", "SF Mono", monospace;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 30px rgba(0,0,0,0.35);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "tnum" 1, "cv01" 1;
+}
+
+body {
+  background-image:
+    radial-gradient(1200px 600px at 80% -10%, rgba(99, 102, 241, 0.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(99, 102, 241, 0.06), transparent 60%);
+  background-attachment: fixed;
+}
+
+/* tabular numerals everywhere numbers matter */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* hairline helpers */
+.hairline {
+  border: 1px solid var(--color-hairline);
+}
+.hairline-b {
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+/* glass card */
+.card {
+  background: var(--color-bg-card);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+/* accent pill / chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.6;
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink-dim);
+  background: rgba(255, 255, 255, 0.03);
+}
+.chip-accent {
+  color: var(--color-accent);
+  border-color: var(--color-accent-line);
+  background: var(--color-accent-soft);
+}
+.chip-danger {
+  color: var(--color-danger);
+  border-color: rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.12);
+}
+.chip-warn {
+  color: var(--color-warn);
+  border-color: rgba(251, 191, 36, 0.4);
+  background: rgba(251, 191, 36, 0.12);
+}
+.chip-ok {
+  color: var(--color-ok);
+  border-color: rgba(52, 211, 153, 0.4);
+  background: rgba(52, 211, 153, 0.12);
+}
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-hairline);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-ink);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+.btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--color-hairline-strong);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn-primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #5457e5;
+  border-color: #5457e5;
+}
+
+/* top tab bar */
+.tabbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 14px;
+  height: 56px;
+  border-bottom: 1px solid var(--color-hairline);
+  background: rgba(11, 13, 20, 0.7);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: var(--color-ink-dim);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.tab:hover {
+  color: var(--color-ink);
+  background: rgba(255, 255, 255, 0.04);
+}
+.tab-active {
+  color: #fff;
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent-line);
+}
+
+/* tools drawer */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 280px;
+  background: var(--color-bg-elev);
+  border-left: 1px solid var(--color-hairline);
+  z-index: 50;
+  padding: 16px 12px;
+  overflow-y: auto;
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.4);
+}
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--color-ink-dim);
+  font-size: 13px;
+  cursor: pointer;
+}
+.drawer-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-ink);
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+/* page scaffold */
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+}
+.page-title {
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.page-sub {
+  color: var(--color-ink-faint);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* mission / brief rows */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-hairline);
+}
+.row:last-child {
+  border-bottom: none;
+}
+
+.muted {
+  color: var(--color-ink-faint);
+}
+.dim {
+  color: var(--color-ink-dim);
+}
