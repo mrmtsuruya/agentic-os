@@ -1,0 +1,18 @@
+{
+  "_comment": "MoA routing config. Swap model names here without changing router.py.",
+  "_vram_reality": "3080 Ti = 12 GB VRAM. Resident brain = gemma3:4b (~3 GB, GPU-resident). Coder qwen3:8b (~5 GB) and vision qwen2.5vl:3b (~2.5 GB) load ON-DEMAND per task via MoA; they do NOT sit resident. 4B+8B=8 GB can coexist; 4B+3B=6.5 GB too. All three at once (13.5 GB) exceeds 12 GB, but MoA invokes specialists per-call so they're never all resident simultaneously. This is the only layout that fits 12 GB while keeping full MoA.",
+  "_lineup": "B: resident uncensored Gemma 4B brain + on-demand Qwen3 8B coder + Qwen2.5-VL 3B vision.",
+  "models": {
+    "main": "gemma3:4b",
+    "coder": "qwen3:8b",
+    "vision": "qwen2.5vl:3b",
+    "reasoning": "qwen3:8b"
+  },
+  "routing_table": {
+    "fast_chat": "main",
+    "code_light": "main",
+    "code_heavy": "coder",
+    "vision": "vision",
+    "reasoning_heavy": "reasoning"
+  }
+}
